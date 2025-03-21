@@ -1,0 +1,35 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "A Simple note taking web application that is build with HTML, CSS and vanilla javascript only.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "lint": "eslint"
+  },
+  "author": "Deepak Kumar",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsdevdeepak/notes.git"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.0",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "src/**/*.{js,css}": [
+      "npm run lint -- --fix",
+      "npm run format"
+    ],
+    "index.html": [
+      "npm run format"
+    ]
+  }
+}
