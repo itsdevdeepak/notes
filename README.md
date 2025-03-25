@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/images/logo.png" />
+</div>
+
 # Notes
 
 A Simple note taking web application that is build with HTML, CSS and vanilla javascript only.
