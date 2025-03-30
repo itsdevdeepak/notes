@@ -1,11 +1,21 @@
 import Service from './base/service.js';
 import NotFound from '../components/404.js';
 
-// Types
 /**
  * @typedef {Object} Route
- * @property {string} path - The URL path for the route
- * @property {Object} component - The component object with a mount method
+ * @property {string} path - The URL path for the route (e.g., '/users/:id')
+ * @property {Component} component - The component to render for this route
+ */
+
+/**
+ * @typedef {Object} Component
+ * @property {function(Params): void} mount - Mounts the component with route parameters
+ * @property {function(): void} unmount - Unmounts the component and cleans up resources
+ */
+
+/**
+ * @typedef {Object.<string, string>} Params
+ * @description An object mapping parameter names to their values extracted from the URL
  */
 
 /**
@@ -16,22 +26,26 @@ import NotFound from '../components/404.js';
 class Router extends Service {
   constructor() {
     super();
-    const container = document.querySelector('.app');
 
-    if (!container) throw new Error('Application mount point not found.');
+    this._appContainer = document.querySelector('.app');
+    if (!this._appContainer)
+      throw new Error('Application mount point not found.');
 
-    this._notFound = new NotFound(container);
+    /** @type {Route[]} */
+    this._routes = [];
+    this._notFound = new NotFound(this._appContainer);
   }
 
   /**
    * Initializes the Router with the specified routes
-   * @param {Route[]} routes - Array of route objects
+   * @param {Route[]} [routes] - Array of route objects
    */
   init(routes = []) {
     if (this._initialized) {
       return;
     }
 
+    /** @type {Route[]} */
     this._routes = routes;
     this._initialized = true;
     this._bindEvents();
@@ -46,7 +60,7 @@ class Router extends Service {
    * When true, it allows browser to navigation back and forward with the route.
    */
   navigate(path, addToHistory = true) {
-    if (addToHistory) history.pushState({ path }, null, path);
+    if (addToHistory) history.pushState({ path }, '', path);
 
     if (this._currentComponent) {
       this._currentComponent.unmount();
@@ -75,9 +89,7 @@ class Router extends Service {
   /**
    * Finds a matching route from the registered routes
    * @param {string} path - The URL path to match against
-   * @returns {Object} return matching route and params
-   * @returns {Object|null} returns.route - matched route
-   * @returns {Object} returns.params - parameters extracted from path
+   * @returns {{route: Route | null, params: Params}} An object containing the matched route and parameters
    * @private
    */
   _findMatchingRoute(path) {
@@ -85,6 +97,7 @@ class Router extends Service {
     if (exactMatch) return { route: exactMatch, params: {} };
 
     for (const route of this._routes) {
+      /** @type {Params} */
       const params = {};
       const routeParts = route.path.split('/');
       const pathParts = path.split('/');
@@ -117,9 +130,10 @@ class Router extends Service {
    * @private
    */
   _bindEvents() {
-    document
-      .querySelector('.app')
-      .addEventListener('click', this._handleNavClick.bind(this));
+    this._appContainer.addEventListener(
+      'click',
+      this._handleNavClick.bind(this)
+    );
 
     window.addEventListener('popstate', event => {
       const path = event.state?.path || this.currentPath();
@@ -129,11 +143,14 @@ class Router extends Service {
 
   /**
    * Handles application link clicks
-   * @param {MouseEvent} event - The click event object
+   * @param {Event} event
    * @private
    */
   _handleNavClick(event) {
-    const navElement = event.target.closest('.app-nav');
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const navElement = target.closest('.app-nav');
     if (!navElement) return;
 
     event.preventDefault();

@@ -1,0 +1,10 @@
+// jsconfig.json - Enables TypeScript-like type checking for JavaScript files
+// using the editor's built-in TypeScript support.
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "strict": true,
+    "lib": ["ESNext", "DOM"]
+  },
+  "include": ["**/*.js"]
+}
