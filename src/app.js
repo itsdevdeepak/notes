@@ -2,6 +2,7 @@ import Notes from './components/Notes.js';
 import Note from './components/Note.js';
 import Archive from './components/Archives.js';
 import Router from './service/router.js';
+import Store from './service/store.js';
 
 function init() {
   const app = document.querySelector('.app');
@@ -23,6 +24,13 @@ function init() {
     }
   ];
 
+  Store.init({
+    notes: [],
+    setting: {
+      theme: 'System',
+      font: 'Sans'
+    }
+  });
   Router.init(routes);
 }
 
