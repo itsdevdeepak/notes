@@ -1,8 +1,8 @@
 import Service from './base/service.js';
 
-/** @typedef {string | number | object | (string | number | object)[]} StoreData */
-/** @typedef {{ [key: string]: StoreData} } State */
-/** @typedef {(function(State): void)} SubscriberCallback */
+/** @typedef {number | string | object | Array<any>} StateValue */
+/** @typedef {{[key: string]: StateValue | undefined}} State  */
+/** @typedef {function(State): void} SubscriberCallback */
 
 class Store extends Service {
   /** @type {State}} */
@@ -43,39 +43,48 @@ class Store extends Service {
   /**
    *  Gets data from state
    * @param {string} prop - State property name that you want to get
-   * @return {StoreData | null} - State data
+   * @return {StateValue | null} - State data
    */
   getState(prop) {
-    return this._state[prop] || null;
+    try {
+      const data = this._state[prop];
+      if (typeof data === 'undefined') {
+        throw new Error(`Requested data for: ${prop} does not exist`);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Invalid request', error);
+      return null;
+    }
   }
 
   /**
    * Update / Adds new data to state
    * @param {string} prop - property name that that you want to change
-   * @param {StoreData} data
+   * @param {StateValue} data
    * @return {boolean} - success status
    */
   setState(prop, data) {
-    if (!prop || typeof prop !== 'string') {
-      console.error('Property name must be a non-empty string');
+    try {
+      if (!prop || typeof prop !== 'string') {
+        throw new Error('Property name must be a non-empty string');
+      }
+
+      if (!this._isValidData(data)) {
+        throw new Error(`data ${data} is not valid value for state.`);
+      }
+
+      this._state[prop] = data;
+      const isSaved = this._saveData(this._storageKey, this._state);
+
+      if (isSaved) {
+        this._notify();
+        return true;
+      }
+    } catch (error) {
+      console.error(`Failed to set { ${prop}: ${data} } on State`, error);
       return false;
-    }
-
-    if (
-      data === undefined ||
-      data === null ||
-      (typeof data === 'number' && isNaN(data))
-    ) {
-      console.error('Data cannot be null, undefined or NaN');
-      return false;
-    }
-
-    this._state[prop] = data;
-    const isSaved = this._saveData(this._storageKey, this._state);
-
-    if (isSaved) {
-      this._notify();
-      return true;
     }
 
     return false;
@@ -98,6 +107,10 @@ class Store extends Service {
     };
   }
 
+  isInitialized() {
+    return this._initialized;
+  }
+
   /**
    * notify all subscribers of state change
    * @private
@@ -115,7 +128,7 @@ class Store extends Service {
   /**
    * Retrieves data from localStorage by key
    * @param {string} key - The key to fetch data from localStorage
-   * @returns {{data: StoreData | null}} The parsed data or null if not found/invalid
+   * @returns {{data: StateValue | null}} The parsed data or null if not found/invalid
    * @private
    */
   _fetchData(key) {
@@ -133,12 +146,16 @@ class Store extends Service {
 
   /** Saves data to localStorage
    * @param {string} key
-   * @param {StoreData} data
+   * @param {StateValue} data
    * @returns {boolean} success status
    * @private
    */
   _saveData(key, data) {
     try {
+      if (!this._isValidData(data)) {
+        throw new Error(`Type ${data} is not a valid type`);
+      }
+
       localStorage.setItem(key, JSON.stringify(data));
       return true;
     } catch (error) {
@@ -162,6 +179,20 @@ class Store extends Service {
         console.error('Error processing storage change', error);
       }
     }
+  }
+
+  /**
+   * @template T
+   * @param {T} data
+   * @returns {data is Exclude<T, null | undefined>}
+   * @private
+   */
+  _isValidData(data) {
+    return (
+      data !== undefined &&
+      data !== null &&
+      !(typeof data === 'number' && isNaN(data))
+    );
   }
 }
 
