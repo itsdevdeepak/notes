@@ -237,7 +237,7 @@
     --icon-size: var(--font-size-heading-large);
     --icon-color: currentColor;
 
-    body[data-color-scheme='dark'] {
+    body[data-theme='dark'] {
       --background-primary: var(--clr-neutral-950);
       --background-secondary: var(--clr-neutral-800);
       --background-ternary: var(--clr-neutral-700);
