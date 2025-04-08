@@ -5,6 +5,9 @@ import Router from './service/router.js';
 import Store from './service/store.js';
 import Theme from './service/theme.js';
 
+/**
+ * Initializes the application.
+ */
 function init() {
   const app = document.querySelector('.app');
 

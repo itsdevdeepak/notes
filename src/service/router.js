@@ -2,26 +2,26 @@ import Service from './base/service.js';
 import NotFound from '../components/404.js';
 
 /**
- * @typedef {Object} Route
+ * @typedef {object} Route
  * @property {string} path - The URL path for the route (e.g., '/users/:id')
  * @property {Component} component - The component to render for this route
  */
 
 /**
- * @typedef {Object} Component
+ * @typedef {object} Component
  * @property {function(Params): void} mount - Mounts the component with route parameters
  * @property {function(): void} unmount - Unmounts the component and cleans up resources
  */
 
 /**
- * @typedef {Object.<string, string>} Params
+ * @typedef {{[key: string]: string}} Params
  * @description An object mapping parameter names to their values extracted from the URL
  */
 
 /**
  * Router service for handling client-side navigation.
  * @class Router
- * @extends Service
+ * @augments Service
  */
 class Router extends Service {
   constructor() {
@@ -143,7 +143,7 @@ class Router extends Service {
 
   /**
    * Handles application link clicks
-   * @param {Event} event
+   * @param {Event} event - The click event object
    * @private
    */
   _handleNavClick(event) {

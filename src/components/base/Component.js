@@ -1,10 +1,11 @@
+/** @typedef {{[key: string]: any}} State  */
+
 /**
  * Base class for all UI components.
  * @abstract
- * @class Component
  */
 export default class Component {
-  /** @type {{[key: string]: any}} */
+  /** @type {State} */
   _state = {};
 
   /** @type {Array<{element: HTMLElement, type: string, handler: EventListener}>} */
@@ -52,7 +53,7 @@ export default class Component {
   }
 
   /**
-   * Unmounts the components
+   * Unmounts the components form currant container.
    */
   unmount() {
     try {
@@ -74,13 +75,14 @@ export default class Component {
    * Renders the component's HTML elements.
    * @returns {string} HTML markup string to be rendered in the container.
    * @protected
+   * @abstract
    */
   _render() {
     throw new Error("Method '_render()' must be implemented.");
   }
 
   /**
-   * Registers an event listener on an element
+   * Registers an event listener on an element.
    * @param {HTMLElement} element - Target DOM element
    * @param {string} type - Event type (e.g., 'click', 'input')
    * @param {EventListener} handler - Event callback function
@@ -101,10 +103,11 @@ export default class Component {
   }
 
   /**
-   * Removes a specific event listener
+   * Removes a given event listener from registered listeners.
    * @param {HTMLElement} element - Target DOM element
    * @param {string} type - Event type to remove
    * @param {EventListener} handler - Event callback to remove
+   * @returns {boolean} - True if removal was successful, false otherwise
    * @private
    */
   _removeEventListener(element, type, handler) {
@@ -112,16 +115,20 @@ export default class Component {
 
     element.removeEventListener(type, handler);
 
+    const totalListeners = this._eventListeners.length;
+
     this._eventListeners = this._eventListeners.filter(
       listener =>
         listener.element !== element ||
         listener.type !== type ||
         listener.handler !== handler
     );
+
+    return totalListeners - this._eventListeners.length === 1;
   }
 
   /**
-   * Removes all event listeners registered by this component
+   * Removes all event listeners registered by this component.
    * @private
    */
   _removeAllEventListeners() {
@@ -134,24 +141,28 @@ export default class Component {
   /**
    * Runs before element renders on page.
    * @protected
+   * @abstract
    */
   _beforeMount() {}
 
   /**
    * Runs after element is rendered on page, use it for adding event handlers.
    * @protected
+   * @abstract
    */
   _afterMount() {}
 
   /**
    * Runs before element is detached.
    * @protected
+   * @abstract
    */
   _beforeUnmount() {}
 
   /**
    * Runs after element is detached.
    * @protected
+   * @abstract
    */
   _afterUnmount() {}
 

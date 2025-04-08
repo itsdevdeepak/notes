@@ -7,7 +7,7 @@ import Store from './store.js';
 
 /**
  * Handles Application Theme and fonts
- * @extends Service
+ * @augments Service
  */
 class Setting extends Service {
   /**@type {Theme[]} */
@@ -123,9 +123,9 @@ class Setting extends Service {
   }
 
   /**
-   *
-   * @param {Font} font
-   * @returns {boolean}
+   * Sets the application font
+   * @param {Font} font - The font to set (sans, serif, or monospace)
+   * @returns {boolean} True if font was set successfully, false otherwise
    */
   setFont(font) {
     try {
@@ -145,7 +145,7 @@ class Setting extends Service {
   }
 
   /**
-   * @param {Exclude<Theme, "system">} theme
+   * @param {Exclude<Theme, "system">} theme - The theme to apply (light or dark)
    */
   _applyTheme(theme) {
     if (!this._appContainer) return;
@@ -154,7 +154,7 @@ class Setting extends Service {
   }
 
   /**
-   * @param {Font} font
+   * @param {Font} font - The font to apply to the application
    */
   _applyFont(font) {
     if (!this._appContainer) return;
@@ -217,9 +217,9 @@ class Setting extends Service {
   }
 
   /**
-   *
-   * @param {any} theme
-   * @returns {theme is Theme}
+   * Validates if the provided parameter is a valid theme
+   * @param {any} theme - The theme value to validate
+   * @returns {theme is Theme} True if the theme is valid, false otherwise
    * @private
    */
   _isValidTheme(theme) {
@@ -230,9 +230,9 @@ class Setting extends Service {
   }
 
   /**
-   *
-   * @param {any} font
-   * @returns {font is Font}
+   * Validates if the provided parameter is a valid font
+   * @param {any} font - The font value to validate
+   * @returns {font is Font} True if the font is valid, false otherwise
    * @private
    */
   _isValidFont(font) {

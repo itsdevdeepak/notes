@@ -1,35 +1,43 @@
 <div align="center">
-  <img src="assets/images/logo.png" />
+  <img src="assets/images/logo.png" alt="Notes Logo" width="100"/>
 </div>
 
 # Notes
 
-A Simple note taking web application that is build with HTML, CSS and vanilla javascript only.
+A simple note-taking web application built with HTML, CSS, and vanilla JavaScript.
 
 ## Run Locally
 
-Clone the project
+1.  Clone the repository:
 
-```bash
-  git clone https://github.com/itsdevdeepak/notes
-```
+    ```bash
+    git clone https://github.com/itsdevdeepak/notes
+    ```
 
-## Optional Setup
+2.  Open `index.html` in your browser.
 
-### Install Linting and Formatting
+    ```bash
+    # Simply open index.html in your browser
+    ```
 
-You can optionally set up linting and formatting tools by installing dependencies:
+    Alternatively, use a local development server (e.g., VS Code's Live Server) for hot reloading:
 
-```bash
-  npm install
-```
+    ```bash
+    # If using VS Code:
+    # 1. Install the "Live Server" extension.
+    # 2. Right-click on index.html and select "Open with Live Server".
+    ```
 
-## Usage
+## Development Setup (Optional)
 
-Open the application in your browser:
+For contributing or advanced usage, set up linting, formatting, and type checking:
 
-```bash
-# Simply open index.html in your browser
-```
+1.  Install dependencies:
 
-Alternatively, use a local development server like Live Server.
+    ```bash
+    npm install
+    ```
+
+## Credits
+
+Special thanks to [Frontend Mentor](https://www.frontendmentor.io/) for providing the design and assets for this project. The original challenge can be found [here](https://www.frontendmentor.io/challenges/note-taking-web-app-773r7bUfOG).

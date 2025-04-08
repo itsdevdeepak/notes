@@ -18,7 +18,7 @@ class Store extends Service {
 
   /**
    * Initializes the store service.
-   * @param {Object} [initialState] - The initial state for the store.
+   * @param {object} [initialState] - The initial state for the store.
    * @param {string} [storageKey] - The key used to store/retrieve data from storage.
    * @returns {void}
    */
@@ -43,7 +43,7 @@ class Store extends Service {
   /**
    *  Gets data from state
    * @param {string} prop - State property name that you want to get
-   * @return {StateValue | null} - State data
+   * @returns {StateValue | null} - State data
    */
   getState(prop) {
     try {
@@ -62,8 +62,8 @@ class Store extends Service {
   /**
    * Update / Adds new data to state
    * @param {string} prop - property name that that you want to change
-   * @param {StateValue} data
-   * @return {boolean} - success status
+   * @param {StateValue} data - value to be stored in the state
+   * @returns {boolean} - success status
    */
   setState(prop, data) {
     try {
@@ -93,6 +93,7 @@ class Store extends Service {
   /**
    * Subscribes a callback function to state changes
    * @param {SubscriberCallback} callback - The callback function to be called with the current state
+   * @returns {function ():void} A function that when called will unsubscribe the callback
    */
   subscribe(callback) {
     if (!callback || typeof callback !== 'function') {
@@ -144,9 +145,10 @@ class Store extends Service {
     }
   }
 
-  /** Saves data to localStorage
-   * @param {string} key
-   * @param {StateValue} data
+  /**
+   * Saves data to localStorage
+   * @param {string} key - The key under which to store the data in localStorage
+   * @param {StateValue} data - The data to be stored in localStorage
    * @returns {boolean} success status
    * @private
    */
@@ -183,8 +185,8 @@ class Store extends Service {
 
   /**
    * @template T
-   * @param {T} data
-   * @returns {data is Exclude<T, null | undefined>}
+   * @param {T} data - The data to validate
+   * @returns {data is Exclude<T, null | undefined>} True if the data is valid (not undefined, null, or NaN), otherwise false
    * @private
    */
   _isValidData(data) {

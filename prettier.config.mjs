@@ -3,5 +3,6 @@ export default {
   arrowParens: 'avoid',
   semi: true,
   singleQuote: true,
-  trailingComma: 'none'
+  trailingComma: 'none',
+  tabWidth: 2
 };
